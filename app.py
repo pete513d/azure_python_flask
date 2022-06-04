@@ -1,12 +1,31 @@
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
+import os
+from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
+db_url = 'mysql://elbek:8200AarhusN!@elbek-mysql.mysql.database.azure.com/elbekdb'
+app.config ['SQLALCHEMY_DATABASE_URI'] = db_url
+
+db = SQLAlchemy(app)
+
+class people(db.Model):
+    personID = db.Column('personID', db.Integer, primary_key = True)
+    name = db.Column(db.String(255))
+
+def __init__(self, name):
+    self.name = name
 
 @app.route('/')
 def index():
-   print('Request for index page received')
-   return render_template('index.html')
+    print('Request for index page received')
+    return render_template('index.html')
+
+@app.route('/database')
+def show_db():
+    print('Request for database page received')
+    return render_template('database.html', people = people.query.all() )
+
 
 @app.route('/favicon.ico')
 def favicon():
@@ -26,4 +45,5 @@ def hello():
 
 
 if __name__ == '__main__':
-   app.run()
+    db.create_all()
+    app.run(debug = True)
