@@ -11,7 +11,7 @@ db = SQLAlchemy(app)
 
 class people(db.Model):
     personID = db.Column('personID', db.Integer, primary_key = True)
-    name = db.Column(db.String(255))
+    name = db.Column(db.String(100))
 
 def __init__(self, name):
     self.name = name
